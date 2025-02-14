@@ -1,10 +1,12 @@
 <?php
 
-namespace Laracsv;
+namespace Playerom\Laracsv\Tests\Laracsv;
 
-use Laracsv\Models\Category;
-use Laracsv\Models\Product;
 use League\Csv\Writer;
+use Playerom\Laracsv\Export;
+use Playerom\Laracsv\Tests\Laracsv\Models\Category;
+use Playerom\Laracsv\Tests\Laracsv\Models\Product;
+use Playerom\Laracsv\Tests\TestCase;
 use stdClass;
 
 class ExportTest extends TestCase

@@ -1,16 +1,16 @@
 <?php
 
-namespace Laracsv;
+namespace Playerom\Laracsv\Tests;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
-use Laracsv\Models\Category;
-use Laracsv\Models\Product;
 use PHPUnit\Framework\TestCase as PhpunitTestCase;
+use Playerom\Laracsv\Tests\Laracsv\Models\Category;
+use Playerom\Laracsv\Tests\Laracsv\Models\Product;
 
 class TestCase extends PhpunitTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $capsule = new Capsule;
 
@@ -25,7 +25,7 @@ class TestCase extends PhpunitTestCase
         $this->seedData();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 

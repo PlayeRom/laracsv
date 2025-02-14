@@ -1,6 +1,6 @@
 <?php
 
-namespace Laracsv\Models;
+namespace Playerom\Laracsv\Tests\Laracsv\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
