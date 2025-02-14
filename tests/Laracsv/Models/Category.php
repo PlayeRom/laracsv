@@ -8,7 +8,7 @@ class Category extends Model
 {
     protected $guarded = ['id'];
 
-    protected $hidden = ['id', 'image_path', 'order_index', 'status', 'created_at', 'updated_at'];
+    protected $hidden = ['image_path', 'order_index', 'status', 'created_at', 'updated_at'];
 
     public function products()
     {

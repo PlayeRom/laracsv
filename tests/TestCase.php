@@ -2,10 +2,12 @@
 
 namespace Playerom\Laracsv\Tests;
 
+use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
 use PHPUnit\Framework\TestCase as PhpunitTestCase;
 use Playerom\Laracsv\Tests\Laracsv\Models\Category;
+use Playerom\Laracsv\Tests\Laracsv\Models\EnumType;
 use Playerom\Laracsv\Tests\Laracsv\Models\Product;
 
 class TestCase extends PhpunitTestCase
@@ -36,6 +38,8 @@ class TestCase extends PhpunitTestCase
             $table->string('title', 100);
             $table->decimal('price', 10, 2);
             $table->decimal('original_price', 10, 2)->nullable();
+            $table->date('production_date')->nullable();
+            $table->enum('type', ['digital', 'physical', 'service'])->default('physical');
             $table->timestamps();
         });
 
@@ -69,6 +73,8 @@ class TestCase extends PhpunitTestCase
                 'title' => $faker->name,
                 'price' => collect(range(4, 100))->random(),
                 'original_price' => collect(range(5, 120))->random(),
+                'production_date' => Carbon::today(),
+                'type' => $faker->randomElement(EnumType::class),
             ]);
 
             $product->categories()->attach(Category::find(collect(range(1, 10))->random()));

@@ -2,9 +2,11 @@
 
 namespace Playerom\Laracsv\Tests\Laracsv;
 
+use Carbon\Carbon;
 use League\Csv\Writer;
 use Playerom\Laracsv\Export;
 use Playerom\Laracsv\Tests\Laracsv\Models\Category;
+use Playerom\Laracsv\Tests\Laracsv\Models\EnumType;
 use Playerom\Laracsv\Tests\Laracsv\Models\Product;
 use Playerom\Laracsv\Tests\TestCase;
 use stdClass;
@@ -198,7 +200,7 @@ class ExportTest extends TestCase
         $csvExporter->build($categories, [
             'id',
             'title',
-            'mainCategory.id' => 'Parent Category ID',
+            'main_category.id' => 'Parent Category ID',
         ]);
 
         $csv = $csvExporter->getReader();
@@ -341,5 +343,26 @@ class ExportTest extends TestCase
         $this->assertEquals("id;title;price;original_price", $firstLine);
         $this->assertCount(11, $lines);
         $this->assertCount(count($fields), explode(';', $lines[2]));
+    }
+
+    public function testSerializeCasting()
+    {
+        $cntCategories = 5;
+        $products = Product::limit($cntCategories)->get();
+
+        $csvExporter = new Export();
+
+        $csvExporter->build($products, [
+            'id',
+            'production_date',
+            'type',
+        ]);
+
+        $csv = $csvExporter->getReader();
+
+        $secondLine = explode(',', explode(PHP_EOL, trim($csv->toString()))[1]);
+
+        $this->assertEquals(Carbon::today()->toDateString(), $secondLine[1]); // Date as a sting in ISO format
+        $this->assertEquals(EnumType::from($secondLine[2])->value, $secondLine[2]); // Type is sting, not enum
     }
 }

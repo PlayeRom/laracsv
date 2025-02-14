@@ -3,6 +3,7 @@
 namespace Playerom\Laracsv;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use League\Csv\Reader;
@@ -219,9 +220,15 @@ class Export
                 $model = collect($model);
             }
 
+            // If $model is a Model object them serialize it to an array,
+            // so that Enums and Carbons will correctly convert to strings.
+            $arrayModel = $model instanceof Model
+                ? $model->toArray()
+                : $model;
+
             $csvRow = [];
             foreach ($fields as $field) {
-                $csvRow[] = Arr::get($model, $field);
+                $csvRow[] = Arr::get($arrayModel, $field);
             }
 
             $writer->insertOne($csvRow);
