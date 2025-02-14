@@ -133,7 +133,7 @@ class Export
     }
 
     /**
-     * Callback which is run before processsing each chunk.
+     * Callback which is run before processing each chunk.
      *
      * @param callable $callback
      * @return $this

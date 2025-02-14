@@ -326,7 +326,7 @@ class ExportTest extends TestCase
         $this->assertCount(count($fields), explode(',', $lines[2]));
     }
 
-    public function testWithCustomDelimeter()
+    public function testWithCustomDelimiter()
     {
         $products = Product::limit(10)->get();
 
