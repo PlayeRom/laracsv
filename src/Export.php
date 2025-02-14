@@ -116,7 +116,7 @@ class Export
     {
         $filename = $filename ?: date('Y-m-d_His') . '.csv';
 
-        $this->writer->output($filename);
+        $this->writer->download($filename);
     }
 
     /**
@@ -152,7 +152,7 @@ class Export
      */
     public function getReader(): Reader
     {
-        return Reader::createFromString($this->writer->getContent());
+        return Reader::createFromString($this->writer->toString());
     }
 
     /**

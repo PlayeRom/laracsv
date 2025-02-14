@@ -20,7 +20,7 @@ class ExportTest extends TestCase
         $csvExporter = new Export();
         $csvExporter->build($products, $fields);
         $csv = $csvExporter->getReader();
-        $lines = explode(PHP_EOL, trim($csv->getContent()));
+        $lines = explode(PHP_EOL, trim($csv->toString()));
         $firstLine = $lines[0];
         $this->assertEquals("id,title,price,original_price", $firstLine);
         $this->assertCount(11, $lines);
@@ -36,7 +36,7 @@ class ExportTest extends TestCase
         $csvExporter = new Export();
         $csvExporter->build($products, $fields);
         $csv = $csvExporter->getReader();
-        $lines = explode(PHP_EOL, trim($csv->getContent()));
+        $lines = explode(PHP_EOL, trim($csv->toString()));
         $firstLine = $lines[0];
         $this->assertSame('id,Name,price,"Retail Price","Custom Field"', $firstLine);
     }
@@ -59,7 +59,7 @@ class ExportTest extends TestCase
         $csvExporter->build($products, $fields);
 
         $csv = $csvExporter->getReader();
-        $lines = explode(PHP_EOL, trim($csv->getContent()));
+        $lines = explode(PHP_EOL, trim($csv->toString()));
         $firstLine = $lines[0];
         $thirdRow = explode(',', $lines[2]);
         $this->assertSame('id,Name,price,"Retail Price","Custom Field"', $firstLine);
@@ -115,7 +115,7 @@ class ExportTest extends TestCase
 
         $export->buildFromBuilder(Product::select(), ['id' => 'ID Header', 'price']);
 
-        $lines = explode(PHP_EOL, trim($export->getReader()->getContent()));
+        $lines = explode(PHP_EOL, trim($export->getReader()->toString()));
 
         $this->assertSame('"ID Header",price', $lines[0]);
 
@@ -123,7 +123,7 @@ class ExportTest extends TestCase
 
         $export->buildFromBuilder(Product::select(), ['id' => 'ID Header', 'price'], ['header' => false]);
 
-        $lines = explode(PHP_EOL, trim($export->getReader()->getContent()));
+        $lines = explode(PHP_EOL, trim($export->getReader()->toString()));
 
         $this->assertNotSame('"ID Header",price', $lines[0]);
     }
@@ -138,7 +138,7 @@ class ExportTest extends TestCase
 
         $export->buildFromBuilder(Product::select(), ['formatted_property'], ['header' => false]);
 
-        $lines = explode(PHP_EOL, trim($export->getReader()->getContent()));
+        $lines = explode(PHP_EOL, trim($export->getReader()->toString()));
 
         foreach ($lines as $index => $line) {
             $this->assertSame('id_' . ($index + 1), $line);
@@ -165,7 +165,7 @@ class ExportTest extends TestCase
         $csvExporter->build($products, ['title', 'price']);
 
         $csv = $csvExporter->getReader();
-        $lines = explode(PHP_EOL, trim($csv->getContent()));
+        $lines = explode(PHP_EOL, trim($csv->toString()));
 
         $this->assertSame('"رجا ابو سلامة",70', $lines[2]);
     }
@@ -180,7 +180,7 @@ class ExportTest extends TestCase
         $csvExporter->build($products, $fields);
         $csv = $csvExporter->getReader();
 
-        $lines = explode(PHP_EOL, trim($csv->getContent()));
+        $lines = explode(PHP_EOL, trim($csv->toString()));
         $firstLine = $lines[0];
         $this->assertEquals("id,title,price,original_price", $firstLine);
         $this->assertCount(11, $lines);
@@ -203,7 +203,7 @@ class ExportTest extends TestCase
 
         $csv = $csvExporter->getReader();
 
-        $secondLine = explode(',', explode(PHP_EOL, trim($csv->getContent()))[1]);
+        $secondLine = explode(',', explode(PHP_EOL, trim($csv->toString()))[1]);
 
         $this->assertCount(3, $secondLine); // There should be a parent id for each category
         $this->assertEquals(1, $secondLine[2]); // Parent ID is always seeded to #1
@@ -263,7 +263,7 @@ class ExportTest extends TestCase
             'address'
         ]);
 
-        $csv = trim($csvExporter->getWriter()->getContent());
+        $csv = trim($csvExporter->getWriter()->toString());
 
         $lines = explode(PHP_EOL, $csv);
         $fourthLine = explode(',', $lines[4]);
@@ -282,8 +282,8 @@ class ExportTest extends TestCase
         $csvExporter->build($products, $fields);
         $reader = $csvExporter->getReader();
         $this->assertCount(11, $reader);
-        $this->assertEquals('title', $reader->fetchOne()[1]);
-        $this->assertEquals(Product::first()->title, $reader->fetchOne(1)[1]);
+        $this->assertEquals('title', $reader->nth(0)[1]);
+        $this->assertEquals(Product::first()->title, $reader->nth(1)[1]);
     }
 
     public function testJson()
@@ -307,7 +307,7 @@ class ExportTest extends TestCase
         $csvExporter = new Export();
         $csvExporter->build($products, $fields);
         $writer = $csvExporter->getWriter();
-        $this->assertNotFalse(strstr($writer->getContent(), Product::first()->title));
+        $this->assertNotFalse(strstr($writer->toString(), Product::first()->title));
     }
 
     public function testWithNoHeader()
@@ -319,7 +319,7 @@ class ExportTest extends TestCase
         $csvExporter = new Export();
         $csvExporter->build($products, $fields, ['header' => false]);
         $csv = $csvExporter->getReader();
-        $lines = explode(PHP_EOL, trim($csv->getContent()));
+        $lines = explode(PHP_EOL, trim($csv->toString()));
         $firstLine = $lines[0];
         $this->assertNotEquals("id,title,price,original_price", $firstLine);
         $this->assertCount(10, $lines);
@@ -336,7 +336,7 @@ class ExportTest extends TestCase
         $csvExporter->getWriter()->setDelimiter(';');
         $csvExporter->build($products, $fields);
         $csv = $csvExporter->getReader();
-        $lines = explode(PHP_EOL, trim($csv->getContent()));
+        $lines = explode(PHP_EOL, trim($csv->toString()));
         $firstLine = $lines[0];
         $this->assertEquals("id;title;price;original_price", $firstLine);
         $this->assertCount(11, $lines);
