@@ -3,13 +3,17 @@
 namespace Playerom\Laracsv\Tests\Laracsv\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
-    protected $guarded = ['id'];
+    protected $guarded = [
+        'id',
+    ];
 
     protected $hidden = [
-        'updated_at', 'created_at',
+        'updated_at',
+        'created_at',
     ];
 
     /**
@@ -27,7 +31,7 @@ class Product extends Model
         ];
     }
 
-    public function categories()
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
     }

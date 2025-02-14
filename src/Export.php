@@ -14,10 +14,8 @@ class Export
 {
     /**
      * The default chunk size when looping through the builder results.
-     *
-     * @var int
      */
-    private const DEFAULT_CHUNK_SIZE = 1000;
+    private const int DEFAULT_CHUNK_SIZE = 1000;
 
     /**
      * The applied callback.
@@ -35,24 +33,18 @@ class Export
 
     /**
      * The CSV writer.
-     *
-     * @var \League\Csv\Writer
      */
-    protected $writer;
+    protected Writer $writer;
 
     /**
      * Export configuration.
-     *
-     * @var array
      */
-    protected $config = [];
+    protected array $config = [];
 
     /**
      * Export constructor.
-     *
-     * @param \League\Csv\Writer|null $writer
      */
-    public function __construct(Writer $writer = null)
+    public function __construct(?Writer $writer = null)
     {
         $this->writer = $writer ?: Writer::createFromFileObject(new SplTempFileObject);
     }
@@ -60,13 +52,9 @@ class Export
     /**
      * Build the writer.
      *
-     * @param \Illuminate\Support\Collection $collection
-     * @param array $fields
-     * @param array $config
-     * @return $this
      * @throws \League\Csv\CannotInsertRecord
      */
-    public function build($collection, array $fields, array $config = []): self
+    public function build(Collection $collection, array $fields, array $config = []): self
     {
         $this->config = $config;
 
@@ -79,10 +67,6 @@ class Export
     /**
      * Build the CSV from a builder instance.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $builder
-     * @param array $fields
-     * @param array $config
-     * @return $this
      * @throws \League\Csv\CannotInsertRecord
      */
     public function buildFromBuilder(Builder $builder, array $fields, array $config = []): self
@@ -109,11 +93,8 @@ class Export
 
     /**
      * Download the CSV file.
-     *
-     * @param string|null $filename
-     * @return void
      */
-    public function download($filename = null): void
+    public function download(?string $filename = null): void
     {
         $filename = $filename ?: date('Y-m-d_His') . '.csv';
 
@@ -122,9 +103,6 @@ class Export
 
     /**
      * Set the callback.
-     *
-     * @param callable $callback
-     * @return $this
      */
     public function beforeEach(callable $callback): self
     {
@@ -135,9 +113,6 @@ class Export
 
     /**
      * Callback which is run before processing each chunk.
-     *
-     * @param callable $callback
-     * @return $this
      */
     public function beforeEachChunk(callable $callback): self
     {
@@ -148,8 +123,6 @@ class Export
 
     /**
      * Get a CSV reader.
-     *
-     * @return Reader
      */
     public function getReader(): Reader
     {
@@ -158,8 +131,6 @@ class Export
 
     /**
      * Get the CSV writer.
-     *
-     * @return Writer
      */
     public function getWriter(): Writer
     {
@@ -168,9 +139,6 @@ class Export
 
     /**
      * Get all the data fields for the current set of fields.
-     *
-     * @param array $fields
-     * @return array
      */
     private function getDataFields(array $fields): array
     {
@@ -185,9 +153,6 @@ class Export
 
     /**
      * Get all the header fields for the current set of fields.
-     *
-     * @param array $fields
-     * @return array
      */
     private function getHeaderFields(array $fields): array
     {
@@ -197,9 +162,6 @@ class Export
     /**
      * Add rows to the CSV.
      *
-     * @param Writer $writer
-     * @param array $fields
-     * @param \Illuminate\Support\Collection $collection
      * @throws \League\Csv\CannotInsertRecord
      */
     private function addCsvRows(Writer $writer, array $fields, Collection $collection): void
@@ -237,10 +199,6 @@ class Export
 
     /**
      * Adds a header row to the CSV.
-     *
-     * @param Writer $writer
-     * @param array $headers
-     * @return void
      */
     private function addHeader(Writer $writer, array $headers): void
     {

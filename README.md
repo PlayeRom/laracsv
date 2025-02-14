@@ -10,7 +10,7 @@ A Laravel package to easily generate CSV files from Eloquent model.
 
 ```php
 $users = User::get(); // All users
-$csvExporter = new \Laracsv\Export();
+$csvExporter = new Playerom\Laracsv\Export();
 $csvExporter->build($users, ['email', 'name'])->download();
 ```
 
@@ -21,8 +21,9 @@ And a proper CSV file will be downloaded with `email` and `name` fields. As simp
 Just run this on your terminal:
 
 ```
-composer require usmanhalalit/laracsv:^2.1
+composer require playerom/laracsv
 ```
+
 and you should be good to go.
 
 ## Full Documentation
@@ -74,7 +75,7 @@ $csvReader = $csvExporter->getReader();
 
 And then you can do several things like:
 ```php
-$csvString = $csvWriter->getContent(); // To get the CSV as string
+$csvString = $csvWriter->toString(); // To get the CSV as string
 $csvReader->jsonSerialize(); // To turn the CSV in to an array
 ```
 
@@ -107,7 +108,7 @@ $csvExporter->build(User::get(), ['email', 'name', 'created_at'], [
 There is a hook which is triggered before processing a database row.
   For example, if you want to change the date format you can do so.
 ```php
-$csvExporter = new \Laracsv\Export();
+$csvExporter = new Playerom\Laracsv\Export();
 $users = User::get();
 
 // Register the hook before building
@@ -150,7 +151,7 @@ You may also tinker relation things as you wish with hooks:
 ```php
 $products = Product::with('categories')->where('order_count', '>', 10)->orderBy('order_count', 'desc')->get();
 $fields = ['id', 'title','original_price' => 'Market Price', 'category_ids',];
-$csvExporter = new \Laracsv\Export();
+$csvExporter = new Playerom\Laracsv\Export();
 $csvExporter->beforeEach(function ($product) {
     $product->category_ids = implode(', ', $product->categories->pluck('id')->toArray());
 });
@@ -160,7 +161,8 @@ $csvExporter->beforeEach(function ($product) {
 
 For larger datasets, which can become more memory consuming, a builder instance can be used to process the results in chunks. Similar to the row-related hook, a chunk-related hook can be used in this case for e.g. eager loading or similar chunk based operations. The behaviour between both hooks is similar; it gets called before each chunk and has the entire collection as an argument. **In case `false` is returned the entire chunk gets skipped and the code continues with the next one.**
 
-```$export = new Export();
+```php
+$export = new Export();
 
 // Perform chunk related operations
 $export->beforeEachChunk(function ($collection) {

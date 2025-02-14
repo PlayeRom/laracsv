@@ -5,6 +5,7 @@ namespace Playerom\Laracsv\Tests;
 use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Schema\Builder;
 use PHPUnit\Framework\TestCase as PhpunitTestCase;
 use Playerom\Laracsv\Tests\Laracsv\Models\Category;
 use Playerom\Laracsv\Tests\Laracsv\Models\EnumType;
@@ -16,10 +17,10 @@ class TestCase extends PhpunitTestCase
     {
         $capsule = new Capsule;
 
-        $capsule->addConnection(array(
+        $capsule->addConnection([
             'driver' => 'sqlite',
             'database' => ':memory:',
-        ));
+        ]);
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
 
@@ -27,11 +28,7 @@ class TestCase extends PhpunitTestCase
         $this->seedData();
     }
 
-    public function tearDown(): void
-    {
-    }
-
-    private function createTables($schema)
+    private function createTables(Builder $schema): void
     {
         $schema->create('products', function (Blueprint $table) {
             $table->increments('id');
@@ -57,7 +54,7 @@ class TestCase extends PhpunitTestCase
         });
     }
 
-    private function seedData()
+    private function seedData(): void
     {
         $faker = \Faker\Factory::create();
         foreach (range(1, 10) as $id => $item) {

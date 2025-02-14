@@ -13,7 +13,7 @@ use stdClass;
 
 class ExportTest extends TestCase
 {
-    public function testBasicCsv()
+    public function testBasicCsv(): void
     {
         $products = Product::limit(10)->get();
 
@@ -29,7 +29,7 @@ class ExportTest extends TestCase
         $this->assertCount(count($fields), explode(',', $lines[2]));
     }
 
-    public function testWithCustomHeaders()
+    public function testWithCustomHeaders(): void
     {
         $products = Product::limit(5)->get();
 
@@ -43,7 +43,7 @@ class ExportTest extends TestCase
         $this->assertSame('id,Name,price,"Retail Price","Custom Field"', $firstLine);
     }
 
-    public function testWithBeforeEachCallback()
+    public function testWithBeforeEachCallback(): void
     {
         $products = Product::limit(5)->get();
 
@@ -70,7 +70,7 @@ class ExportTest extends TestCase
         $this->assertCount(5, $lines);
     }
 
-    public function testBeforeEachChunkCallback()
+    public function testBeforeEachChunkCallback(): void
     {
         $export = new Export();
 
@@ -94,7 +94,7 @@ class ExportTest extends TestCase
         $export->buildFromBuilder(Product::select(), ['id']);
     }
 
-    public function testBuilderChunkSize()
+    public function testBuilderChunkSize(): void
     {
         $export = new Export();
 
@@ -111,7 +111,7 @@ class ExportTest extends TestCase
         $export->buildFromBuilder(Product::select(), ['formatted_property' => 'Property'], ['chunk' => 5]);
     }
 
-    public function testBuilderHeader()
+    public function testBuilderHeader(): void
     {
         $export = new Export();
 
@@ -130,7 +130,7 @@ class ExportTest extends TestCase
         $this->assertNotSame('"ID Header",price', $lines[0]);
     }
 
-    public function testBuilder()
+    public function testBuilder(): void
     {
         $export = new Export();
 
@@ -147,7 +147,7 @@ class ExportTest extends TestCase
         }
     }
 
-    public function testUtf8()
+    public function testUtf8(): void
     {
         foreach (range(11, 15) as $item) {
             $product = Product::create([
@@ -172,7 +172,7 @@ class ExportTest extends TestCase
         $this->assertSame('"رجا ابو سلامة",70', $lines[2]);
     }
 
-    public function testCustomLeagueCsvWriters()
+    public function testCustomLeagueCsvWriters(): void
     {
         $products = Product::limit(10)->get();
 
@@ -190,7 +190,7 @@ class ExportTest extends TestCase
         unlink('test.csv');
     }
 
-    public function testCaseSensitiveRelationNames()
+    public function testCaseSensitiveRelationNames(): void
     {
         $cntCategories = 5;
         $categories = Category::limit($cntCategories)->with('mainCategory')->get();
@@ -211,7 +211,7 @@ class ExportTest extends TestCase
         $this->assertEquals(1, $secondLine[2]); // Parent ID is always seeded to #1
     }
 
-    public function testIlluminateSupportCollection()
+    public function testIlluminateSupportCollection(): void
     {
         $faker = \Faker\Factory::create();
 
@@ -241,7 +241,7 @@ class ExportTest extends TestCase
         $this->assertSame('4', $fourthLine[0]);
     }
 
-    public function testExportPlainObjects()
+    public function testExportPlainObjects(): void
     {
         $faker = \Faker\Factory::create();
 
@@ -274,7 +274,7 @@ class ExportTest extends TestCase
         $this->assertSame('4', $fourthLine[0]);
     }
 
-    public function testRead()
+    public function testRead(): void
     {
         $products = Product::limit(10)->get();
 
@@ -288,7 +288,7 @@ class ExportTest extends TestCase
         $this->assertEquals(Product::first()->title, $reader->nth(1)[1]);
     }
 
-    public function testJson()
+    public function testJson(): void
     {
         $products = Product::limit(10)->get();
 
@@ -300,7 +300,7 @@ class ExportTest extends TestCase
         $this->assertEquals(Product::first()->title, $reader->jsonSerialize()[1][1]);
     }
 
-    public function testWriter()
+    public function testWriter(): void
     {
         $products = Product::limit(10)->get();
 
@@ -312,7 +312,7 @@ class ExportTest extends TestCase
         $this->assertNotFalse(strstr($writer->toString(), Product::first()->title));
     }
 
-    public function testWithNoHeader()
+    public function testWithNoHeader(): void
     {
         $products = Product::limit(10)->get();
 
@@ -328,7 +328,7 @@ class ExportTest extends TestCase
         $this->assertCount(count($fields), explode(',', $lines[2]));
     }
 
-    public function testWithCustomDelimiter()
+    public function testWithCustomDelimiter(): void
     {
         $products = Product::limit(10)->get();
 
@@ -345,7 +345,7 @@ class ExportTest extends TestCase
         $this->assertCount(count($fields), explode(';', $lines[2]));
     }
 
-    public function testSerializeCasting()
+    public function testSerializeCasting(): void
     {
         $cntCategories = 5;
         $products = Product::limit($cntCategories)->get();
